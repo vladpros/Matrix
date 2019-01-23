@@ -23,12 +23,13 @@ namespace less111
             OutMatr(b);
 
             var pts1 = new ParameterizedThreadStart(ThreadMethod);
-
+            var p = new Per();
             for (int i = 0; i < 10; i++)
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    string p = $"{i}{j}";
+                    p.i = i;
+                    p.j = j;
                     Thread thread = new Thread(pts1);
                     thread.Start(p);
                 }
@@ -41,9 +42,10 @@ namespace less111
 
         private static void ThreadMethod(object obj)
         {
-            string p = (string)obj;
-            int k = p[0]-48;
-            int l = p[1]-48;
+            obj = (Per)obj;
+            int k = obj.i;
+            int l = obj.j;
+
             int sum=0;
             Console.WriteLine($"Begin {k} + {l} thread");
             try
