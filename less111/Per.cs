@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace less111
 {
-    class Per
+    public class Per
     {
+
         public int i { get; set; }
         public int j { get; set; }
-
+    
     }
 }

@@ -10,17 +10,17 @@ namespace less111
     class Program
     {
 
-        private static int[,] a = new int[10, 6];
-        private static int[,] b = new int[6, 10];
-        private static int[,] c = new int[10, 10];
+        private static int[,] A = new int[10, 6];
+        private static int[,] B = new int[6, 10];
+        private static int[,] C = new int[10, 10];
         private static object _locker = new object();
 
 
         static void Main(string[] args)
         {
             GenMatr();
-            OutMatr(a);
-            OutMatr(b);
+            OutMatr(A);
+            OutMatr(B);
 
             var pts1 = new ParameterizedThreadStart(ThreadMethod);
             var p = new Per();
@@ -28,45 +28,36 @@ namespace less111
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    p.i = i;
-                    p.j = j;
-                    Thread thread = new Thread(pts1);
-                    thread.Start(p);
+                        p.i = i;
+                        p.j = j;
+                        Thread thread = new Thread(pts1);
+                        Thread.Sleep(200);
+                        thread.Start(p);
                 }
             }
-
+            Thread.Sleep(1000);
             Console.WriteLine();
-            OutMatr(c);
+            OutMatr(C);
             Console.ReadKey();
         }
 
         private static void ThreadMethod(object obj)
         {
-            obj = (Per)obj;
-            int k = obj.i;
-            int l = obj.j;
+            var obj1 = (Per)obj;
+            int k = obj1.i;
+            int l = obj1.j;
 
-            int sum=0;
+            int sum = 0;
             Console.WriteLine($"Begin {k} + {l} thread");
-            try
+
+            for (int i = 0; i < 6; i++)
             {
-                Monitor.Enter(_locker);
-                for (int i = 0; i < 6; i++)
+                for (int j = 0; j < 6; j++)
                 {
-                    for (int j = 0; j < 6; j++)
-                    {
-                        sum += a[k, i] * b[j, l];
-                    }
+                    sum += A[k, i] * B[j, l];
                 }
-                c[k, l] = sum;
             }
-            finally
-            {
-                Monitor.Exit(_locker);
-            }
-
-
-
+            C[k, l] = sum;
         }
 
         static void GenMatr()
@@ -75,25 +66,25 @@ namespace less111
             {
                 for (int j = 0; j < 6; j++)
                 {
-                    a[i, j] = i;
-                    b[j, i] = j;
+                    A[i, j] = i;
+                    B[j, i] = j;
                 }
             }
         }
 
         static void OutMatr(int[,] matr)
         {
-            for (int i=0;i<matr.GetLength(0);i++)
+            for (int i = 0; i < matr.GetLength(0); i++)
             {
-                for (int j = 0; j < matr.GetLength(1);j++)
+                for (int j = 0; j < matr.GetLength(1); j++)
                 {
-                    Console.Write($"{matr[i,j]} ");
+                    Console.Write($"{matr[i, j]} ");
                 }
                 Console.WriteLine();
             }
             Console.WriteLine();
             Console.WriteLine();
         }
+
     }
 }
-
